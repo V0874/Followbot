@@ -28,13 +28,13 @@ int main(){
 
    if (readPin(&PORTB, PB5)){
 
-    // 11 (right IR sensor)
+    // 11 (right IR sensor) drive right motor
 
     setLow(&PORTH, PH5);
 
   } else if (readPin(&PORTB, PB4)){
 
-    // 10 (center IR sensor)
+    // 10 (center IR sensor) drive both motors
 
     // motor 1    
     setLow(&PORTG, PG5);
@@ -44,7 +44,7 @@ int main(){
 
   } else if (readPin(&PORTH, PH6)){
 
-    // 9 (left IR sensor)
+    // 9 (left IR sensor) drive left motor
 
     setLow(&PORTG, PG5);
 

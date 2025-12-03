@@ -18,7 +18,13 @@ int main(){
     setOutput(&DDRH, PH5);
     setOutput(&DDRE, PE3);
 
+    // set up pwm signal
+
+    enable_pwm_timer3();
+
     // read sensor input and drive motors
+
+    while(1){
 
    if (readPin(&PORTB, PB5)){
 
@@ -44,5 +50,6 @@ int main(){
 
   } else {
 
+    }
   } 
 }

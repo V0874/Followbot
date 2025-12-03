@@ -1,12 +1,14 @@
-#include "motor_pwm.h"
+#include "../motor_pwm/motor_pwm.h"
 
 int main(){
 
     // set sensor pins as inputs
 
-    setInput(&PORTB, PB5);
-    setInput(&PORTB, PB4);
-    setInput(&PORTH, PH6);
+    setInput(&DDRB, PB5);
+    setInput(&DDRB, PB4);
+    setInput(&DDRH, PH6);
+
+    setOutput(&DDRB, PB7);
 
     // set motor 1 outputs
 
@@ -26,13 +28,22 @@ int main(){
 
     while(1){
 
-   if (readPin(&PORTB, PB5)){
+      setLow(&PORTB, PB7);
+
+      int right = !readPin(&PINB, PB5);
+      int center = !readPin(&PINB, PB4);
+      int left = !readPin(&PINH, PH6);
+
+  if (right){
 
     // 11 (right IR sensor) drive right motor
-
     setLow(&PORTH, PH5);
 
-  } else if (readPin(&PORTB, PB4)){
+    setHigh(&PORTB, PB7);
+
+  } 
+  
+  if (center){
 
     // 10 (center IR sensor) drive both motors
 
@@ -42,14 +53,19 @@ int main(){
     // motor 2
     setLow(&PORTH, PH5);
 
-  } else if (readPin(&PORTH, PH6)){
+  } 
+  
+  if (left){
 
     // 9 (left IR sensor) drive left motor
-
     setLow(&PORTG, PG5);
 
-  } else {
+    setHigh(&PORTB, PB7);
 
+    }
+
+    if (right || center || left){
+      setHigh(&PORTB, PB7);
     }
   } 
 }

@@ -4,4 +4,4 @@ This read me is a work in progress.
 
 
 
-![Followbot Wiring Diagram](./assets/FollowbotWiringDiagramImg.svg)
+![Followbot Wiring Diagram](./assets/FollowbotWiringDiagram.svg)

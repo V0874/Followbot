@@ -7,9 +7,7 @@ int main(){
     setInput(&DDRB, PB5);
     setInput(&DDRB, PB4);
     setInput(&DDRH, PH6);
-
-    setOutput(&DDRB, PB7);
-
+    
     // set motor 1 outputs
 
     setOutput(&DDRG, PG5);
@@ -20,15 +18,14 @@ int main(){
     setOutput(&DDRH, PH5);
     setOutput(&DDRE, PE3);
 
-    // set up pwm signal
+    // set up pwm signals
 
-    enable_pwm_timer3();
-
+    enable_pwm_timer3_pin3();
+    enable_pwm_timer3_pin5();
+    
     // read sensor input and drive motors
 
     while(1){
-
-      setLow(&PORTB, PB7);
 
       int right = !readPin(&PINB, PB5);
       int center = !readPin(&PINB, PB4);
@@ -38,8 +35,7 @@ int main(){
 
     // 11 (right IR sensor) drive right motor
     setLow(&PORTH, PH5);
-
-    setHigh(&PORTB, PB7);
+    timer16bit_set_output_compare_a_value(TIMER3, 127);
 
   } 
   
@@ -49,23 +45,18 @@ int main(){
 
     // motor 1    
     setLow(&PORTG, PG5);
-
+    timer16bit_set_output_compare_a_value(TIMER3, 127);
     // motor 2
     setLow(&PORTH, PH5);
-
+    timer16bit_set_output_compare_c_value(TIMER3, 127);
   } 
   
   if (left){
 
     // 9 (left IR sensor) drive left motor
     setLow(&PORTG, PG5);
+    timer16bit_set_output_compare_c_value(TIMER3, 127);
 
-    setHigh(&PORTB, PB7);
-
-    }
-
-    if (right || center || left){
-      setHigh(&PORTB, PB7);
     }
   } 
 }

@@ -6,17 +6,17 @@ void enable_pwm(timer16bit_t* timer, uint8_t mode, uint8_t prescaler, uint8_t ou
     timer16bit_set_compare_output_mode(timer, output_mode);
 }
 
-void turn_left(timer16bit_t* timer, uint8_t port, uint8_t pin, uint8_t speed){
+void turn_left(timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed){
     setHigh(&port, pin); 
     timer16bit_set_output_compare_c_value(timer, speed);
 }
 
-void turn_right(timer16bit_t* timer, uint8_t port, uint8_t pin, uint8_t speed){
+void turn_right(timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed){
     setLow(&port, pin);
     timer16bit_set_output_compare_a_value(timer, speed);
 }
 
-void forward(timer16bit_t* timer, uint8_t port1, uint8_t port2, uint8_t pin1, uint8_t pin2, uint8_t speed){
+void forward(timer16bit_t* timer, volatile uint8_t* port1, volatile uint8_t* port2, uint8_t pin1, uint8_t pin2, uint8_t speed){
     setHigh(&port1, pin1);
     setLow(&port2, pin2); 
 

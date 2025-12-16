@@ -3,54 +3,36 @@
 int main() {
 
     // set sensor pins as inputs
-    setInput(&DDRE, PE4);
-    setInput(&DDRB, PB4);
-    setInput(&DDRH, PH6);
+    setInput(&SENSOR1_DDR, SENSOR1_PIN);
+    setInput(&SENSOR2_DDR, SENSOR2_PIN);
     
     // set motor 1 outputs
-    setOutput(&DDRG, PG5);
-    setOutput(&DDRE, PE5);
+    setOutput(&MOTOR1_DIRECTION_DDR, MOTOR1_DIRECTION_PIN);
+    setOutput(&MOTOR1_SPEED_DDR, MOTOR1_SPEED_PIN);
 
     // set motor 2 outputs
-    setOutput(&DDRH, PH5);
-    setOutput(&DDRE, PE3);
+    setOutput(&MOTOR2_DIRECTION_DDR, MOTOR2_DIRECTION_PIN);
+    setOutput(&MOTOR2_SPEED_DDR, MOTOR2_SPEED_PIN);
 
     // set up pwm signals
-    enable_pwm_timer3_pin3();
-    enable_pwm_timer3_pin5();
+    enable_pwm(TIMER3, TIMER16BIT_FAST_PWM_8BIT, 
+    TIMER16BIT_64PRESCALER, TIMER16BIT_CLEAR_OCN_MODE);
     
     while(1) {
 
-        int right = !readPin(&PINB, PB4);
-        int left = !readPin(&PINH, PH6);
-        int center = !readPin(&PINE, PE4);
+        int right_sensor = readPin(&SENSOR1_PIN_REG, SENSOR1_PIN);
+        int left_sensor = readPin(&SENSOR2_PIN_REG, SENSOR2_PIN);
 
-        if (center) {
-
-            // drive both motors
-            setHigh(&PORTG, PG5);
-            setLow(&PORTH, PH5); 
-
-            timer16bit_set_output_compare_c_value(TIMER3, 127); 
-            timer16bit_set_output_compare_a_value(TIMER3, 127);
-        }
-        
-        else {
-
-            if (right) {
-                setLow(&PORTH, PH5);
-                timer16bit_set_output_compare_a_value(TIMER3, 127);
+            if (!right_sensor) {
+            drive_motor1(TIMER3, &MOTOR1_DIRECTION_PORT, MOTOR1_DIRECTION_PIN, 35);
             } else {
-                timer16bit_set_output_compare_a_value(TIMER3, 0);
+                slow_motor3(TIMER3, 0);
             }
 
-        
-            if (left) {
-                setHigh(&PORTG, PG5); 
-                timer16bit_set_output_compare_c_value(TIMER3, 127);
+            if (!left_sensor) {
+            drive_motor2(TIMER3, &MOTOR2_DIRECTION_PORT, MOTOR2_DIRECTION_PIN, 35);
             } else {
-                timer16bit_set_output_compare_c_value(TIMER3, 0); 
+                slow_motor1(TIMER3, 0);
             }
-        }
     }
 }

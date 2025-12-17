@@ -17,8 +17,8 @@ void drive_motor1(volatile timer16bit_t* timer, volatile uint8_t* port, uint8_t 
 }
 
 void forward(volatile timer16bit_t* timer, volatile uint8_t* motor1_port, volatile uint8_t* motor2_port, uint8_t motor1_pin, uint8_t motor2_pin, uint8_t speed){
-    setHigh(motor1_port, motor1_pin);
-    setLow(motor2_port, motor2_pin); 
+    setHigh(motor2_port, motor2_pin);
+    setLow(motor1_port, motor1_pin); 
 
     timer16bit_set_output_compare_c_value(timer, speed); 
     timer16bit_set_output_compare_a_value(timer, speed);

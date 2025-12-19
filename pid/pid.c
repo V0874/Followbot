@@ -1,5 +1,4 @@
 #include "pid.h"
-#include "../motor_pwm/motor_pwm.h"
 
 void initialize_pid(pid_t* pid){
     pid->kp = 40;

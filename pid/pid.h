@@ -1,4 +1,4 @@
-#include "../../VFrame/vframe.h"
+#include <stdint.h>
 
 typedef struct {
     uint16_t kp;

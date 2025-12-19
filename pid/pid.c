@@ -5,20 +5,16 @@ void initialize_pid(pid_t* pid){
     pid->ki = 2;
     pid->kd = 2;
 
-    pid->error = 0;
     pid->min_limit = 0;
     pid->max_limit = 255;
 
     pid->output = 0;
 }
 
-uint16_t update_pid(pid_t* pid, uint16_t set_point, uint16_t sensor1, uint16_t sensor2){
-    uint16_t pv = sensor1 - sensor2;
-    uint16_t error = set_point - pv;
-    
-    pid->error = error;
+int16_t update_pid(pid_t* pid, int16_t set_point, int16_t measurement){
+    int16_t error = set_point - measurement;
 
-    uint16_t proportional_speed = error * pid->kp;
+    int16_t proportional_speed = error * pid->kp;
 
     pid->output = proportional_speed;
     return pid->output;

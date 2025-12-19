@@ -19,9 +19,6 @@ int main() {
     enable_pwm(TIMER3, TIMER16BIT_FAST_PWM_8BIT, 
     TIMER16BIT_64PRESCALER, TIMER16BIT_CLEAR_OCN_MODE);
 
-    int16_t right_sensor = readPin(&SENSOR1_PIN_REG, SENSOR1_PIN);
-    int16_t left_sensor = readPin(&SENSOR2_PIN_REG, SENSOR2_PIN);
-
     int16_t base_speed = 50;
     
     pid_t pid_controller;
@@ -32,8 +29,8 @@ int main() {
 
     while(1) {
 
-        // calculate sensor error offset
-        int16_t measurement = right_sensor - left_sensor;
+        // calculate error offset from left and right sensors
+        int16_t measurement = readPin(&SENSOR1_PIN_REG, SENSOR1_PIN) - readPin(&SENSOR2_PIN_REG, SENSOR2_PIN);
 
         int16_t output = update_pid(&pid_controller, 0, measurement);
 

@@ -1,4 +1,5 @@
 #include "../motor_pwm/motor_pwm.h"
+#include "../pid/pid.h"
 
 int main() {
 
@@ -18,23 +19,23 @@ int main() {
     enable_pwm(TIMER3, TIMER16BIT_FAST_PWM_8BIT, 
     TIMER16BIT_64PRESCALER, TIMER16BIT_CLEAR_OCN_MODE);
 
-    int base_speed = 50;
-    int set_point = 0;
-    int proportional_gain = 40;
-
+    uint16_t base_speed = 50;
     
+    pid_t* pid_controller;
+
+    initialize_pid(pid_controller);
+
     while(1) {
 
-        int right_sensor = readPin(&SENSOR1_PIN_REG, SENSOR1_PIN);
-        int left_sensor = readPin(&SENSOR2_PIN_REG, SENSOR2_PIN);
+        uint16_t right_sensor = readPin(&SENSOR1_PIN_REG, SENSOR1_PIN);
+        uint16_t left_sensor = readPin(&SENSOR2_PIN_REG, SENSOR2_PIN);
 
-        int process_variable = right_sensor - left_sensor;
-        int error = set_point - process_variable;
-        
-        int proportional_speed = error * proportional_gain;
+        uint16_t output = update_pid(pid_controller, 0, right_sensor, left_sensor);
 
-        int left_motor_speed = base_speed + proportional_speed;
-        int right_motor_speed = base_speed - proportional_speed;
+        uint16_t error = pid_controller->error;
+
+        uint16_t left_motor_speed = base_speed + output;
+        uint16_t right_motor_speed = base_speed - output;
 
         if(error < 0){
             drive_motor1(TIMER3, &MOTOR1_DIRECTION_PORT, MOTOR1_DIRECTION_PIN, left_motor_speed);

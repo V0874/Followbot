@@ -24,6 +24,9 @@ int main() {
     pid_t pid_controller;
     
     pid_controller.kp = 40;
+    
+    pid_controller.min_limit = 0;
+    pid_controller.max_limit = 255;
 
     initialize_pid(&pid_controller);
 

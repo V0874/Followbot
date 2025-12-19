@@ -21,8 +21,11 @@
 #define MOTOR2_SPEED_PIN PE5
 
 void enable_pwm(volatile timer16bit_t* timer, uint8_t mode, uint8_t prescaler, uint8_t output_mode);
-void drive_motor2(volatile timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed);
-void drive_motor1(volatile timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed);
+void forward_motor1(volatile timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed);
+void forward_motor2(volatile timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed);
 void forward(volatile timer16bit_t* timer, volatile uint8_t* motor1_port, volatile uint8_t* motor2_port, uint8_t motor1_pin, uint8_t motor2_pin, uint8_t speed);
-void slow_motor1(volatile timer16bit_t* timer, uint8_t speed);
-void slow_motor3(volatile timer16bit_t* timer, uint8_t speed);
+void backward_motor1(volatile timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed);
+void backward_motor2(volatile timer16bit_t* timer, volatile uint8_t* port, uint8_t pin, uint8_t speed);
+void backward(volatile timer16bit_t* timer, volatile uint8_t* motor1_port, volatile uint8_t* motor2_port, uint8_t motor1_pin, uint8_t motor2_pin, uint8_t speed);
+void change_speed_motor1(volatile timer16bit_t* timer, uint8_t speed);
+void change_speed_motor2(volatile timer16bit_t* timer, uint8_t speed);

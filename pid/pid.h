@@ -5,8 +5,6 @@ typedef struct {
     int16_t ki;
     int16_t kd;
 
-    int16_t error;
-
     int16_t min_limit;
     int16_t max_limit;
 

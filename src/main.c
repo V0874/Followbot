@@ -19,28 +19,32 @@ int main() {
     enable_pwm(TIMER3, TIMER16BIT_FAST_PWM_8BIT, 
     TIMER16BIT_64PRESCALER, TIMER16BIT_CLEAR_OCN_MODE);
 
-    uint16_t base_speed = 50;
-    
-    pid_t* pid_controller;
+    int16_t right_sensor = readPin(&SENSOR1_PIN_REG, SENSOR1_PIN);
+    int16_t left_sensor = readPin(&SENSOR2_PIN_REG, SENSOR2_PIN);
 
-    initialize_pid(pid_controller);
+    int16_t base_speed = 50;
+    
+    pid_t pid_controller;
+    
+    pid_controller.kp = 40;
+
+    initialize_pid(&pid_controller);
 
     while(1) {
 
-        uint16_t right_sensor = readPin(&SENSOR1_PIN_REG, SENSOR1_PIN);
-        uint16_t left_sensor = readPin(&SENSOR2_PIN_REG, SENSOR2_PIN);
+        // calculate sensor error offset
+        int16_t measurement = right_sensor - left_sensor;
 
-        uint16_t output = update_pid(pid_controller, 0, right_sensor, left_sensor);
+        int16_t output = update_pid(&pid_controller, 0, measurement);
 
-        uint16_t error = pid_controller->error;
+        // left/right motor speed is adjusted based on output and increased/decreased
+        int16_t left_motor_speed = base_speed + output;
+        int16_t right_motor_speed = base_speed - output;
 
-        uint16_t left_motor_speed = base_speed + output;
-        uint16_t right_motor_speed = base_speed - output;
-
-        if(error < 0){
+        if(measurement < 0){
             drive_motor1(TIMER3, &MOTOR1_DIRECTION_PORT, MOTOR1_DIRECTION_PIN, left_motor_speed);
             drive_motor2(TIMER3, &MOTOR2_DIRECTION_PORT, MOTOR2_DIRECTION_PIN, right_motor_speed);
-        } else if (error > 0) {
+        } else if (measurement > 0) {
             drive_motor1(TIMER3, &MOTOR1_DIRECTION_PORT, MOTOR1_DIRECTION_PIN, left_motor_speed);
             drive_motor2(TIMER3, &MOTOR2_DIRECTION_PORT, MOTOR2_DIRECTION_PIN, right_motor_speed);
         } else {

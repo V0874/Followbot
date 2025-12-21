@@ -5,6 +5,14 @@ typedef struct {
     int16_t ki;
     int16_t kd;
 
+    int16_t summation;
+
+    int16_t prev_error;
+    
+    int16_t proportional;
+    int16_t integral;
+    int16_t derivative; 
+
     int16_t min_limit;
     int16_t max_limit;
 
